@@ -1,0 +1,124 @@
+{
+  "typography": {
+    "font_family": "'DM Sans', system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif",
+    "font_mono": "'DM Mono', ui-monospace, SFMono-Regular, Menlo, monospace",
+    "scale": {
+      "text-xs": "10px",
+      "text-sm": "13px",
+      "text-base": "15px",
+      "text-md": "16px",
+      "text-lg": "20px",
+      "text-xl": "24px"
+    },
+    "line_heights": { "body": "1.5", "heading": "1.25" },
+    "font_weights": { "regular": "400", "medium": "500", "semibold": "600", "bold": "700" }
+  },
+  "colors": {
+    "brand": {
+      "brand-red": "#FF3621",
+      "brand-hover": "#EB1600",
+      "brand-light": "rgba(255, 54, 33, 0.08)"
+    },
+    "semantic": {
+      "success": "#2E844A",
+      "success-light": "rgba(46, 132, 74, 0.10)",
+      "warning": "#FFAB00",
+      "warning-light": "rgba(255, 171, 0, 0.12)",
+      "info": "#0176D3",
+      "error": "#FF3621",
+      "on-order": "#0176D3",
+      "on-order-light": "rgba(1, 118, 211, 0.10)",
+      "quarantined": "#7A4FCF",
+      "quarantined-light": "rgba(122, 79, 207, 0.12)"
+    },
+    "surface": {
+      "page": "#F9F7F4",
+      "card": "#FFFFFF",
+      "cool": "#F0F2F5",
+      "navy-900": "#1B3139",
+      "navy-700": "#1B5162",
+      "navy-500": "#618794",
+      "navy-300": "#C4CCD6",
+      "navy-200": "#E5EAF1",
+      "navy-100": "#EDF2F8",
+      "text": "#1B3139"
+    }
+  },
+  "spacing": {
+    "space-1": "4px",
+    "space-2": "8px",
+    "space-3": "12px",
+    "space-4": "16px",
+    "space-5": "20px",
+    "space-6": "24px",
+    "space-8": "32px",
+    "space-12": "48px"
+  },
+  "radius": {
+    "radius-sharp": "0",
+    "radius-sm": "4px",
+    "radius-md": "8px",
+    "radius-lg": "12px",
+    "radius-pill": "999px"
+  },
+  "shadows": {
+    "shadow-sm": "0 2px 8px rgba(27, 49, 57, 0.06)",
+    "shadow-md": "0 4px 16px rgba(27, 49, 57, 0.08)",
+    "shadow-lg": "0 8px 32px rgba(27, 49, 57, 0.12)"
+  },
+  "breakpoints": { "tablet": "768px", "desktop": "1024px" },
+  "app_icon": {
+    "source": ".consort/design/assets/warehouse.png",
+    "install_to": "client/public/warehouse.png"
+  },
+  "components": {
+    "navbar": {
+      "class": "navbar",
+      "notes": "navy-900 top bar, 64px tall, 2px brand-red bottom border; navbar__brand (warehouse app icon + 'StockFlow') left, navbar__link right; active link gets navbar__link--active. Every feature page reachable from a link here.",
+      "variants": "navbar__brand, navbar__icon, navbar__links, navbar__link, navbar__link--active"
+    },
+    "page": {
+      "class": "page",
+      "notes": "warm-oat page bg, centered ~960px content column; page__header holds page__title with the warehouse icon (page__title-icon) next to the name."
+    },
+    "card": {
+      "class": "card",
+      "notes": "white surface, soft navy-tinted --shadow-sm, --radius-lg, --space-5 padding; the stock table and detail panels live in cards."
+    },
+    "button": {
+      "class": "btn",
+      "variants": "btn--primary (solid brand-red, sharp 0 corners, for Receive/Pick/Save/active), btn--secondary (outlined, --radius-md), btn--ghost (text-only). Tap target >= 44x44px."
+    },
+    "form_input": {
+      "class": "field",
+      "notes": "persistent visible label above input (never placeholder-only); field__label, field__input with --color-info focus ring, field__error shown inline next to the offending field naming it."
+    },
+    "table": {
+      "class": "stock-table",
+      "notes": "cool uppercase header row; quantity cells right-aligned via stock-table__num in --font-mono with tabular-nums; calm high-contrast rows for scanning."
+    },
+    "status_badge": {
+      "class": "badge",
+      "notes": "pill, --text-xs uppercase; state carried by BOTH text and color, never color alone.",
+      "variants": "badge--in-stock (success), badge--low (warning), badge--out (error), badge--on-order (info), badge--quarantined (purple)"
+    },
+    "scan_zone": {
+      "class": "scan-zone",
+      "notes": "primary barcode input on the warehouse floor; scan-zone--success green flash + row updates in place, scan-zone--error red flash + persistent error toast.",
+      "variants": "scan-zone--success, scan-zone--error"
+    },
+    "empty_state": {
+      "class": "empty-state",
+      "notes": "icon + teaching heading (empty-state__title) + copy + a CTA, never a blank region (e.g. 'No stock at this location, receive an inbound shipment'); also the 'not tracked' state for SKUs with no batch/serial detail."
+    },
+    "toast": {
+      "class": "toast",
+      "notes": "fixed top-right, no layout shift; toast--ok auto-dismisses, toast--error persists.",
+      "variants": "toast--ok, toast--error"
+    },
+    "app_icon": {
+      "class": "navbar__icon",
+      "notes": "the warehouse mark from client/public/warehouse.png, rendered in the navbar next to 'StockFlow' (navbar__icon), in the page title (page__title-icon), and set as the browser-tab favicon in index.html."
+    }
+  }
+}

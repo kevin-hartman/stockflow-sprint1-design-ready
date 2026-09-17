@@ -1,0 +1,89 @@
+{
+  "version": 1,
+  "feature_id": "F1-stock-visibility",
+  "stories": {
+    "S1-file-stock": {
+      "status": "ready",
+      "acceptance": {
+        "decision": "revise",
+        "history": [
+          {
+            "decision": "revise",
+            "at": "2026-09-17T07:01:05.255Z",
+            "approver": "human-proxy",
+            "reason": "blocking smell \"reflect-testlist-defect\": reflection gate: T4 ('POST omitting sku returns 4xx naming the missing field') and T5 ('POST with negative quantity returns 4xx') are tagged ac_id='AC2-retrieve-stock-record', but both test the POST/write endpoint's input validation — AC2's assertion is about the GET/retrieval path returning filed data unchanged. These tests do not assert what AC2 requires; they belong to the write path. Re-tag them to the correct AC. Note: AC1 is declared layer='E2E' (Playwright), so API-kind behavior tests cannot be re-tagged to AC1 without a layer conflict (check 7). The correct fix is to add a dedicated API-layer AC for write-path input-validation errors, or split AC1 into an E2E happy-path AC and an API-layer validation AC, and tag T4/T5 to that API AC.; NFR-R1-migration-data-survival (tier=product, not exempt) has no covering fitness test item in the test list. Its fitness function requires 'an additive migration applied to a branch already holding stock_records rows' — this is un-buildable in S1, which contains only the INITIAL create-table migration (no pre-existing rows, no additive migration to apply). Per the test-strategy canon, data-survival fitness tests apply only to a later ADDITIVE migration on a pre-existing table. Remove NFR-R1 from S1's required-NFR obligations and anchor its fitness test item to the first later story that introduces an additive migration on stock_records."
+          },
+          {
+            "decision": "revise",
+            "at": "2026-09-17T07:13:57.990Z",
+            "approver": "human-proxy",
+            "reason": "blocking smell \"reflect-testlist-defect\": reflection gate: AC4 asserts a field-naming 4xx for ANY missing required field (sku, location, quantity, inventory_code per PI2 and the architecture's input-validation mapping 'SKU/location/quantity/code present' to app/routes). The behavior test-list covers only missing sku (T12) and missing location (T13); there are no API-layer behavior tests for a null/absent quantity (distinct from T14's negative-value case) or a null/absent inventory_code. The DB fitness tests T18 and T19 probe only the NOT NULL constraint violation, not the field-naming 4xx API response. An implementation that validates only sku+location at the boundary but propagates a DB NOT NULL exception (returning 500, not a named 4xx) for null quantity or inventory_code would pass T12, T13, T18, and T19 while violating AC4's promise. Add two behavior tests: one for a write omitting quantity returning 4xx naming 'quantity', and one for a write omitting inventory_code returning 4xx naming 'inventory_code' (or 'tracking_code' per the AC wording)."
+          },
+          {
+            "decision": "revise",
+            "at": "2026-09-17T07:23:47.947Z",
+            "approver": "human-proxy",
+            "reason": "blocking smell \"reflect-testlist-defect\": reflection gate: T22–T25 are tagged nfr_id: 'NFR-boundary-input-validation', whose fitness_functions all state rejection happens 'at the app/routes boundary'. But T22–T25 call the file-stock SERVICE directly with missing fields and assert 'the service raises a validation error that names X'. The architecture explicitly assigns input validation to boundary (app/routes/) and states validation must reject 'before the write ever reaches app/services/app/repositories'. A correct Driver implementation with validation only at app/routes will pass T1–T5 (which test the HTTP boundary) but FAIL T22–T25: the service, never designed to validate, will forward the missing field to the repository; the repository write WILL be called, not NOT-called, so the asserted not-called check fails. These tests are unfulfillable by a conforming implementation and dead-lock the cycle. Fix: either re-frame T22–T25 to call the HTTP endpoint (like T1–T5) so they genuinely test the boundary the NFR mandates, or replace them with explicitly-endorsed service-level defense-in-depth tests under a distinct NFR/AC that the architecture approves."
+          },
+          {
+            "decision": "revise",
+            "at": "2026-09-17T07:36:55.077Z",
+            "approver": "human-proxy",
+            "reason": "blocking smell \"reflect-testlist-defect\": reflection gate: T19 is a kind:'client' TypeScript Playwright test, but its description uses Python syntax: 'fills the form (SKU with a uuid.uuid4()-suffixed value...)'. In a TypeScript Playwright test uuid.uuid4() does not exist; a driver following this literally will import from the 'uuid' npm package, which is not a scaffolded dependency and fails CI with 'Cannot find package uuid'. The description must reference crypto.randomUUID() instead (the built-in, zero-import alternative the test-strategy canon mandates for all JS/TS tests)."
+          }
+        ],
+        "approver": "human-proxy",
+        "at": "2026-09-17T07:36:55.077Z",
+        "reason": "blocking smell \"reflect-testlist-defect\": reflection gate: T19 is a kind:'client' TypeScript Playwright test, but its description uses Python syntax: 'fills the form (SKU with a uuid.uuid4()-suffixed value...)'. In a TypeScript Playwright test uuid.uuid4() does not exist; a driver following this literally will import from the 'uuid' npm package, which is not a scaffolded dependency and fails CI with 'Cannot find package uuid'. The description must reference crypto.randomUUID() instead (the built-in, zero-import alternative the test-strategy canon mandates for all JS/TS tests)."
+      },
+      "gate": {
+        "status": "approved",
+        "history": [
+          {
+            "action": "approved",
+            "at": "2026-09-17T08:12:03.011Z",
+            "approver": "Kevin Hartman"
+          }
+        ],
+        "approver": "Kevin Hartman",
+        "approved_at": "2026-09-17T08:12:03.011Z"
+      }
+    },
+    "S2-stock-by-location-table": {
+      "status": "ready",
+      "gate": {
+        "status": "approved",
+        "history": [
+          {
+            "action": "approved",
+            "at": "2026-09-17T08:15:19.603Z",
+            "approver": "Kevin Hartman"
+          }
+        ],
+        "approver": "Kevin Hartman",
+        "approved_at": "2026-09-17T08:15:19.603Z"
+      }
+    },
+    "S3-sku-detail-view": {
+      "status": "ready",
+      "gate": {
+        "status": "approved",
+        "history": [
+          {
+            "action": "approved",
+            "at": "2026-09-17T08:15:19.909Z",
+            "approver": "Kevin Hartman"
+          }
+        ],
+        "approver": "Kevin Hartman",
+        "approved_at": "2026-09-17T08:15:19.909Z"
+      }
+    }
+  },
+  "build_queue": [
+    "S1-file-stock",
+    "S2-stock-by-location-table",
+    "S3-sku-detail-view"
+  ],
+  "build_active": null
+}

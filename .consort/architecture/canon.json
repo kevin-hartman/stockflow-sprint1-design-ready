@@ -1,0 +1,27 @@
+{
+  "established_by": "F1-stock-visibility",
+  "established_at": "2026-09-17T06:52:57.002Z",
+  "ac_layers": [
+    "E2E",
+    "API"
+  ],
+  "nfr_posture": [],
+  "invariant_patterns": [
+    {
+      "type": "unique",
+      "brief": "A unique constraint on (sku, location) guarantees no two rows share the same SKU+location pair; a second write to an existing pair cannot create a duplicate row."
+    },
+    {
+      "type": "not_null",
+      "brief": "sku, location, quantity, and inventory_code are NOT NULL; a stock record cannot be persisted without a SKU, a location, a quantity, and its combined tracking code."
+    },
+    {
+      "type": "check",
+      "brief": "CHECK (quantity >= 0) rejects any write that would store a negative stock level; no negative quantity is ever persisted."
+    },
+    {
+      "type": "migration_reversible",
+      "brief": "The initial create_table migration for stock_records is reversible: a single-step downgrade-then-upgrade recreates the table with its columns and the (sku, location) unique + quantity CHECK constraints. This is schema recreation, not row survival (an initial create has no pre-existing rows to preserve)."
+    }
+  ]
+}
